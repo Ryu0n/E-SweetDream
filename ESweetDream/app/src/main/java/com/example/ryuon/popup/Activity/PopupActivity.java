@@ -9,11 +9,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.ryuon.popup.Bluetooth.BluetoothHelper;
+import com.example.ryuon.popup.Module_Object.Lamp;
 import com.example.ryuon.popup.R;
+
+import java.util.ArrayList;
 
 public class PopupActivity extends AppCompatActivity {
 
-    TextView txtText;
+    ArrayList<Lamp> lamp;
+    String send_Info;
 
 
     @Override
@@ -23,30 +28,41 @@ public class PopupActivity extends AppCompatActivity {
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_popup);
 
+        lamp = (ArrayList<Lamp>)getIntent().getSerializableExtra("lamp");
+
+
+
 
     }
 
     public void onRedButtonClicked(View view){
-        Intent intent=new Intent(this,GroupControlActivity.class);
-        startActivity(intent);
+        send_color_Data("1");
+        System.out.println("★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★");
     }
     public void onOrangeButtonClicked(View view){
-        Intent intent=new Intent(this,GroupControlActivity.class);
-        startActivity(intent);
+
     }
     public void onYellowButtonClicked(View view){
-        Intent intent=new Intent(this,GroupControlActivity.class);
-        startActivity(intent);
+        send_color_Data("3");
     }
 
     public void onGreenButtonClicked(View view){
-        Intent intent=new Intent(this,GroupControlActivity.class);
-        startActivity(intent);
+
     }
 
     public void onBlueButtonClicked(View view){
-        Intent intent=new Intent(this,GroupControlActivity.class);
-        startActivity(intent);
+        send_color_Data("5");
+    }
+
+    void send_color_Data(String color) {
+        try{
+            lamp.get(0).setColor(color);
+            send_Info=lamp.get(0).getPower()+lamp.get(0).getWeather()+lamp.get(0).getColor();
+            // 데이터 송신
+            BluetoothHelper.send_Data(0, send_Info);
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
 

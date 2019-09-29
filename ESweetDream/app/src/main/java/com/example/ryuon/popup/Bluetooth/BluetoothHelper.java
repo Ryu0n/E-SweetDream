@@ -22,7 +22,7 @@ public class BluetoothHelper implements Serializable, Runnable {
     private BluetoothAdapter bluetoothAdapter; // 블루투스 어댑터
 
     public ArrayList<BluetoothSocket> bluetoothSockets;
-    ArrayList<OutputStream> outputStreams;
+    static ArrayList<OutputStream> outputStreams;
     ArrayList<InputStream> inputStreams;
     ArrayList<String> module_name; // GroupControlActivity에서 넘겨준 module 이름
 
@@ -131,6 +131,18 @@ public class BluetoothHelper implements Serializable, Runnable {
             e.printStackTrace();
         }
 
+    }
+
+    private static OutputStream outputStream = null; // 20190916.12:31 add
+    // 모듈에 맞는 outputStream을 get하여 아두이노로 송신한다.
+    public static void send_Data(int deviceIndex, String send_Info) { // 20190916.12:31 add
+        try{
+            // 데이터 송신
+            outputStream = outputStreams.get(deviceIndex);
+            outputStream.write(send_Info.getBytes());
+        }catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
 //        // 센서모듈만요
