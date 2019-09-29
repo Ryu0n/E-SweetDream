@@ -17,13 +17,16 @@ import java.util.ArrayList;
 import java.util.Set;
 import java.util.UUID;
 
-public class BluetoothHelper implements Serializable {
+public class BluetoothHelper implements Serializable, Runnable {
     private static Set<BluetoothDevice> devices; // 블루투스 디바이스 데이터 셋
     private BluetoothAdapter bluetoothAdapter; // 블루투스 어댑터
 
     public ArrayList<BluetoothSocket> bluetoothSockets;
     ArrayList<OutputStream> outputStreams;
     ArrayList<InputStream> inputStreams;
+    ArrayList<String> module_name; // GroupControlActivity에서 넘겨준 module 이름
+
+    boolean running = true;
 
     public BluetoothHelper() {
         // 블루투스 활성화하기
@@ -36,6 +39,33 @@ public class BluetoothHelper implements Serializable {
                 GroupEditingActivity_new.setModuleList(selectBluetoothDevice()); // 블루투스 디바이스 선택 함수 호출
             }
         }
+    }
+
+    @Override
+    public void run() {
+        connectDevice(module_name);
+
+        try {
+          while (!Thread.currentThread().isInterrupted()) {
+              Thread.sleep(3000);
+              System.out.println("Thread is alive ..");
+          }
+        } catch (InterruptedException e) {
+
+        } finally {
+            System.out.println("Thread is dead !!");
+            disconnectDevice();
+        }
+
+
+    }
+
+    public void setModuleName(ArrayList<String> moduleName) {
+        this.module_name = moduleName;
+    }
+
+    public void setRunning(boolean running) {
+        this.running = running;
     }
 
     public ArrayList<String> selectBluetoothDevice() {
@@ -89,6 +119,8 @@ public class BluetoothHelper implements Serializable {
     }
 
     public void disconnectDevice() {
+//        System.out.println("☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★done☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★");
+
         try {
             for (int i = 0; i < bluetoothSockets.size(); i++) {
                 inputStreams.get(i).close();
@@ -98,6 +130,7 @@ public class BluetoothHelper implements Serializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
 //        // 센서모듈만요

@@ -16,7 +16,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.ryuon.popup.AutoControl.AutoControlConditionActivity;
 
 
-import com.example.ryuon.popup.BackgroundThread;
 import com.example.ryuon.popup.Bluetooth.BluetoothHelper;
 import com.example.ryuon.popup.CustomViewAdapter.GroupControl.ListViewBtnAdapter_Blind;
 import com.example.ryuon.popup.CustomViewAdapter.GroupControl.ListViewBtnAdapter_Lamp;
@@ -75,13 +74,10 @@ public class GroupControlActivity extends AppCompatActivity implements ListViewB
 
     Group receivedData_selected_group;
 
+    Thread thread;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        BackgroundThread backgroundThread = new BackgroundThread();
-        Thread t = new Thread(backgroundThread);
-        t.start();
-
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_control);
 
@@ -95,13 +91,13 @@ public class GroupControlActivity extends AppCompatActivity implements ListViewB
             module_name.add(sortModuleList.get(i).getName());
         }
 
-        if (getIntent().getSerializableExtra("bluetoothHelper") != null) {
-            bluetoothHelper = (BluetoothHelper) getIntent().getSerializableExtra("bluetoothHelper");
-        } else {
+        if (thread == null) {
             bluetoothHelper = new BluetoothHelper();
+            bluetoothHelper.setModuleName(module_name);
+            thread = new Thread(bluetoothHelper);
+            thread.start();
         }
 
-        bluetoothHelper.connectDevice(module_name);
 
         //간단한 팝업창이 뜨는 부분
         CharSequence text="자동제어조건을 설정하세요";
@@ -204,13 +200,19 @@ public class GroupControlActivity extends AppCompatActivity implements ListViewB
         int id = item.getItemId();
 
         if (id == R.id.action_autocontrolcondition) {
-            bluetoothHelper.disconnectDevice();
             Intent intent = new Intent(this, AutoControlConditionActivity.class);
             intent.putExtra("selectedGroup", receivedData_selected_group);
-            startActivity(intent);
+            startActivityForResult(intent, 0);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0) {
+
+        }
     }
 
 
@@ -238,9 +240,8 @@ public class GroupControlActivity extends AppCompatActivity implements ListViewB
                 Intent intent = new Intent(this, PopupActivity.class);
                 startActivity(intent);
             } else {
-                bluetoothHelper.disconnectDevice();
                 Intent intent = new Intent(this, ManualLampActivity.class);
-                intent.putExtra("moduleNames", module_name);
+//                intent.putExtra("moduleNames", module_name);
                 startActivity(intent);
             }
         }
@@ -316,5 +317,12 @@ public class GroupControlActivity extends AppCompatActivity implements ListViewB
                 sortModuleList.add(moduleList.get(i));
             }
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        thread.interrupt();
+        thread = null;
+        finish();
     }
 }

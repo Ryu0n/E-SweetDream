@@ -46,7 +46,7 @@ public class AutoControlConditionActivity extends AppCompatActivity{
         setContentView(R.layout.activity_auto_control_condition);
 
         receivedData_selected_group = (Group) getIntent().getSerializableExtra("selectedGroup");
-        bluetoothHelper = (BluetoothHelper) getIntent().getSerializableExtra("bluetoothHelper");
+//        bluetoothHelper = (BluetoothHelper) getIntent().getSerializableExtra("bluetoothHelper");
 
 
         for(int i = 0; i < 24; i++){
@@ -212,9 +212,10 @@ public class AutoControlConditionActivity extends AppCompatActivity{
         makeInfo();
         Intent intent = new Intent(this,GroupControlActivity.class);
         intent.putExtra("selectedGroup", receivedData_selected_group);
-        intent.putExtra("go_GroupControl",auto_condition_info);
-        intent.putExtra("bluetoothHelper", bluetoothHelper);
-        startActivity(intent);
+        intent.putExtra("go_GroupControl", auto_condition_info);
+//        intent.putExtra("bluetoothHelper", bluetoothHelper);
+        setResult(RESULT_OK, intent);
+        finish();
 
         return super.onOptionsItemSelected(item);
     }

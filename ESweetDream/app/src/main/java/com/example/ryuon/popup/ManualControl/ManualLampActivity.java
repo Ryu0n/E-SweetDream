@@ -14,8 +14,8 @@ public class ManualLampActivity extends AppCompatActivity implements ManualContr
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manual_lamp);
-        ArrayList<String> module_name = (ArrayList<String>) getIntent().getSerializableExtra("moduleNames");
-        BluetoothHelper bluetoothHelper = new BluetoothHelper();
-        bluetoothHelper.connectDevice(module_name);
+//        ArrayList<String> module_name = (ArrayList<String>) getIntent().getSerializableExtra("moduleNames");
+//        BluetoothHelper bluetoothHelper = new BluetoothHelper();
+//        bluetoothHelper.connectDevice(module_name);
     }
 }
