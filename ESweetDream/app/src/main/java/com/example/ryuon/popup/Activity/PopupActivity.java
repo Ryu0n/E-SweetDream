@@ -39,39 +39,24 @@ public class PopupActivity extends AppCompatActivity {
     }
 
     public void onRedButtonClicked(View view){
-        send_color_Data("1");
         Intent intent = new Intent(this,GroupControlActivity.class);
         intent.putExtra("selectedGroup", receivedData_selected_group);
         setResult(100, intent);
         finish();
     }
     public void onYellowButtonClicked(View view){
-        send_color_Data("3");
         Intent intent = new Intent(this,GroupControlActivity.class);
         intent.putExtra("selectedGroup", receivedData_selected_group);
         setResult(101, intent);
         finish();
     }
     public void onBlueButtonClicked(View view){
-        send_color_Data("5");
         Intent intent = new Intent(this,GroupControlActivity.class);
         intent.putExtra("selectedGroup", receivedData_selected_group);
         setResult(102, intent);
         finish();
     }
-
-    void send_color_Data(String color) {
-        try{
-            lamp.get(0).setColor(color);
-            send_Info=lamp.get(0).getPower()+lamp.get(0).getWeather()+lamp.get(0).getColor();
-            // 데이터 송신
-            BluetoothHelper.send_Data(0, send_Info);
-        }catch(Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
+    
     //취소 버튼 클릭
     public void mOnClose(View v){
         //데이터 전달하기
