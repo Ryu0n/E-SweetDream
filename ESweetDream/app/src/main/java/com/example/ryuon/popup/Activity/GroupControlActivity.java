@@ -126,11 +126,6 @@ public class GroupControlActivity extends AppCompatActivity implements ListViewB
             thread.start();
         }
 
-
-
-
-
-
         //간단한 팝업창이 뜨는 부분
         CharSequence text="자동제어조건을 설정하세요";
         int duration=Toast.LENGTH_LONG;
