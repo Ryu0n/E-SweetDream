@@ -145,6 +145,19 @@ public class BluetoothHelper implements Serializable, Runnable {
         }
     }
 
+    public static int findingIndex(String moduleName) {
+        int index = 0;
+        int deviceIndex = 0;
+
+        for (BluetoothDevice bluetoothDevice : devices) {
+            if (bluetoothDevice.getName().contains(moduleName)) {
+                deviceIndex = index;
+            }
+            index++;
+        }
+        return deviceIndex;
+    }
+
 //        // 센서모듈만요
 //    public void receiveData() {
 //        for (int i = 0; i < bluetoothDevices.size(); i ++){
@@ -152,6 +165,7 @@ public class BluetoothHelper implements Serializable, Runnable {
 //
 //            }
 //        }
+//
 //        final Handler handler = new Handler(); // 나중에 안되면 내 책임 - import 둘중 하나 첫번쨰꺼 고름 (android.os)
 //        // 데이터를 수신하기 위한 버퍼를 생성
 //        readBufferPosition = 0;
