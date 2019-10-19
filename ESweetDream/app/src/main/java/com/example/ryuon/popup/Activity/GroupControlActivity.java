@@ -9,6 +9,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -108,12 +109,14 @@ public class GroupControlActivity extends AppCompatActivity implements ListViewB
     //날씨 결과
     String result;
 
+    TextView sensingValue;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_control);
 
-
+        sensingValue = (TextView) findViewById(R.id.sensing);
         receivedData_selected_group = (Group) getIntent().getSerializableExtra("selectedGroup");
 
         moduleList.addAll(receivedData_selected_group.getModule_List());
@@ -176,6 +179,7 @@ public class GroupControlActivity extends AppCompatActivity implements ListViewB
         sensorAdapter = new ListViewBtnAdapter_Sensor(this, R.layout.listview_btn_item3, sensor) ;
         listview3 = (ListView)findViewById(R.id.group_list_sensor);
         listview3.setAdapter(sensorAdapter);
+        searchingSensingValue();
 
         Intent intent=getIntent();
         String message = intent.getStringExtra(EXTRA_MESSAGE);
@@ -284,8 +288,8 @@ public class GroupControlActivity extends AppCompatActivity implements ListViewB
     public void onListBtnClick(int event_position) {
         if (event_position == 1) {
             Intent intent = new Intent(this, ManualPlugActivity.class);
-            intent.putExtra("moduleNames", module_name);
-            intent.putExtra("selectedGroup", receivedData_selected_group);
+            intent.putExtra("plug",plug);
+            startActivity(intent);
         } else if (event_position == 2){
             Intent intent = new Intent(this, ManualBlindActivity.class);
             intent.putExtra("moduleNames", module_name);
@@ -432,10 +436,35 @@ public class GroupControlActivity extends AppCompatActivity implements ListViewB
         }
     }
 
+    public void searchingSensingValue(){
+        Thread sensingThread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(!Thread.currentThread().isInterrupted()){ // 안먹힘...
+                    handler.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            sensingValue.setText("온도 : " + BluetoothHelper.temperature + "℃, 습도 : " +  BluetoothHelper.humidity + "%, 조도 : " + BluetoothHelper.lux);
+                        }
+                    });
+                    try{
+                        thread.sleep(3000);
+                    }
+                    catch(Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+        }
+        );
+        sensingThread.start();
+    }
+
     @Override
     public void onBackPressed() {
         thread.interrupt();
-        weatherThread.interrupt();
+//        weatherThread.interrupt();
 
         thread = null;
         weatherThread = null;
