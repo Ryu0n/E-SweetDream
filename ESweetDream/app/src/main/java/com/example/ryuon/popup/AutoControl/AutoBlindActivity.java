@@ -14,9 +14,9 @@ import java.util.Date;
 public class AutoBlindActivity extends AppCompatActivity implements  AutoControl, Runnable{
 
     ArrayList<Blind> blind;
-    ArrayList<Float> user_lux = new ArrayList<>();
+    ArrayList<Integer> user_lux = new ArrayList<>();
     SimpleDateFormat format = new SimpleDateFormat( "HHmm");
-    float lux;
+    int lux;
 
     public AutoBlindActivity(ArrayList<Blind> blind){
         for (int i = 0; i < blind.size(); i++) {
@@ -27,13 +27,13 @@ public class AutoBlindActivity extends AppCompatActivity implements  AutoControl
 
     @Override
     public void run() {
-        while (!Thread.currentThread().interrupted()) {
+        while (!Thread.currentThread().isInterrupted()) {
             Calendar time = Calendar.getInstance(); // 실시간으로 시간을 받아온다.
 
             int current_time = Integer.parseInt(format.format(time.getTime())); // format에 맞게 변환된 시간을 int로 변환(format형식은 전역변수참고)
 
             try {
-                lux = (float) BluetoothHelper.lux;
+                lux = (int) BluetoothHelper.lux;
                 Date sleepFormat = new SimpleDateFormat( "HHmm").parse(blind.get(0).get_sleep_time());
                 Date change_sleep_time = new Date(sleepFormat.getTime());
 
@@ -41,11 +41,7 @@ public class AutoBlindActivity extends AppCompatActivity implements  AutoControl
 
                 if (check_sleep_time == current_time) {
                     BluetoothHelper.send_Data(BluetoothHelper.findingIndex("블라인드"), "0");
-                    try {
-                        Thread.sleep(timeDiff(blind.get(0).get_sleep_time(),blind.get(0).get_wake_time()));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    Thread.sleep(timeDiff(blind.get(0).get_sleep_time(),blind.get(0).get_wake_time()));
                 } else {
                     for (int i = 0; i < blind.size(); i++) {
                         if (user_lux.get(i) > lux) {
@@ -54,11 +50,12 @@ public class AutoBlindActivity extends AppCompatActivity implements  AutoControl
                             BluetoothHelper.send_Data(BluetoothHelper.findingIndex("블라인드"), "2");
                         }
                     }
-
-                    //Thread.sleep(30000); //센서모듈이 값을 다시 받아올때 까지 스레드 중지
                 }
-
-            } catch (Exception e) {
+                Thread.sleep(3000); //센서모듈이 값을 다시 받아올때 까지 스레드 중지
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                Thread.currentThread().interrupt();
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
         }

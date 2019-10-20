@@ -32,6 +32,6 @@ public class ManualBlindActivity extends AppCompatActivity implements ManualCont
     public void BlindDown(View view) {
 //        data = 2;
         int deviceIndex = BluetoothHelper.findingIndex("블라인드");
-        BluetoothHelper.send_Data(deviceIndex, '2 ');
+        BluetoothHelper.send_Data(deviceIndex, '2');
     }
 }

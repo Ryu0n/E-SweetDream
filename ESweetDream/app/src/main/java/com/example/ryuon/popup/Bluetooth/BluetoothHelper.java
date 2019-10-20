@@ -147,7 +147,6 @@ public class BluetoothHelper implements Serializable, Runnable {
         try{
             // 데이터 송신
             outputStream = outputStreams.get(deviceIndex);
-            System.out.println("☆★☆★☆★☆★☆★☆★☆★☆★☆★" + bluetoothDevices.get(deviceIndex).getName() + "☆★☆★☆★☆★☆★☆★☆★☆★☆★" + deviceIndex);
             outputStream.write(send_Info.getBytes());
         }catch(Exception e) {
             e.printStackTrace();
@@ -156,10 +155,8 @@ public class BluetoothHelper implements Serializable, Runnable {
 
     public static void send_Data(int deviceIndex, char send_Info) {
         try{
-
             // 데이터 송신
             outputStream = outputStreams.get(deviceIndex);
-            System.out.println("☆★☆★☆★☆★☆★☆★☆★☆★☆★" + send_Info);
             outputStream.write(send_Info);
 //            if (send_Info == 1) {
 //                outputStream.write(send_Info);
@@ -177,17 +174,13 @@ public class BluetoothHelper implements Serializable, Runnable {
             // 데이터 송신
             outputStream = outputStreams.get(deviceIndex);
             if (plugNum == 1) {
-//                outputStream.write(plugNum);
-                System.out.println("☆★☆★☆★☆★☆★☆★☆★☆★☆★" + bluetoothDevices.get(deviceIndex).getName() + "☆★☆★☆★☆★☆★☆★☆★☆★☆★" + deviceIndex);
                 if (onoff == 1){
-                    System.out.println("☆★☆★☆★☆★☆★☆★☆★☆★☆★");
                     outputStream.write(11); // ON
                 } else {
                     outputStream.write(10); // OFF
                 }
 
             } else if (plugNum == 2) {
-                outputStream.write(plugNum);
                 if (onoff == 1){
                     outputStream.write(21); // ON
                 } else {
@@ -247,7 +240,6 @@ public class BluetoothHelper implements Serializable, Runnable {
                             counter = 0;
                             break;
                     }
-                    System.out.println("☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★☆★" + humidity + temperature + lux);
                 }
             }
         } catch (IOException e) {

@@ -22,10 +22,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.ryuon.popup.AutoControl.AutoBlindActivity;
 import com.example.ryuon.popup.AutoControl.AutoControlConditionActivity;
 
 
 import com.example.ryuon.popup.AutoControl.AutoLampActivity;
+import com.example.ryuon.popup.AutoControl.AutoPlugActivity;
 import com.example.ryuon.popup.Bluetooth.BluetoothHelper;
 import com.example.ryuon.popup.CustomViewAdapter.GroupControl.ListViewBtnAdapter_Blind;
 import com.example.ryuon.popup.CustomViewAdapter.GroupControl.ListViewBtnAdapter_Lamp;
@@ -98,8 +100,12 @@ public class GroupControlActivity extends AppCompatActivity implements ListViewB
     Thread thread;
     Thread weatherThread;
     Thread autoMoodThread;
+    Thread autoblindTrhead;
+    Thread autoplugThread;
 
     AutoLampActivity autoLampActivity;
+    AutoBlindActivity autoBlindActivity;
+    AutoPlugActivity autoPlugActivity;
 
     final Handler handler = new Handler(); // 날씨 스레드를 위한 핸들러
 
@@ -258,10 +264,26 @@ public class GroupControlActivity extends AppCompatActivity implements ListViewB
             auto_control_Info = (ArrayList<String>)data.getSerializableExtra("go_GroupControl");
 
             String make_sleep_time = auto_control_Info.get(0) + auto_control_Info.get(1);
-            lamp.get(0).set_sleep_time(make_sleep_time);
-
             String wake_sleep_time = auto_control_Info.get(2) + auto_control_Info.get(3);
-            lamp.get(0).set_wake_time(wake_sleep_time);
+            if (lamp.size() > 0) {
+                lamp.get(0).set_sleep_time(make_sleep_time);
+                lamp.get(0).set_wake_time(wake_sleep_time);
+                String sleep_time_before = auto_control_Info.get(4);
+                lamp.get(0).set_sleep_time_before(sleep_time_before);
+            }
+            if (blind.size() > 0) {
+                blind.get(0).set_sleep_time(make_sleep_time);
+                blind.get(0).set_wake_time(wake_sleep_time);
+                blind.get(0).setLux(Integer.valueOf(auto_control_Info.get(9)));
+            }
+
+            if (plug.size() > 0) {
+                plug.get(0).setTemperature(Integer.valueOf(auto_control_Info.get(5)));
+                plug.get(0).setTemperature_ud(Integer.valueOf(auto_control_Info.get(6)));
+                plug.get(0).setHumidity(Integer.valueOf(auto_control_Info.get(7)));
+                plug.get(0).setHumidity_ud(Integer.valueOf(auto_control_Info.get(8)));
+            }
+
 
         }
 
@@ -336,34 +358,54 @@ public class GroupControlActivity extends AppCompatActivity implements ListViewB
         if (!lamp.isEmpty() && lamp.get(0).get_sleep_time() != "" && lamp.get(0).get_wake_time() != "") {
             lampAdapter.setActivate(on);
             lampAdapter.notifyDataSetChanged();
+            if (on) {
+                if( autoMoodThread == null){
+                    autoLampActivity = new AutoLampActivity(lamp);
+                    autoMoodThread = new Thread(autoLampActivity);
 
+                    autoMoodThread.start();
 
-            boolean interrupt = false;
-            if(autoLampActivity == null && autoMoodThread == null){
-                autoLampActivity = new AutoLampActivity(lamp);
-                autoMoodThread = new Thread(autoLampActivity);
-
-                autoMoodThread.start();
-
-            }else{
-                autoMoodThread.interrupt();
-                autoLampActivity = new AutoLampActivity(lamp);
-                autoMoodThread = new Thread(autoLampActivity);
-
-                autoMoodThread.start();
+                }
+            } else {
+                if (autoMoodThread != null){
+                    autoMoodThread.interrupt();
+                    autoMoodThread = null;
+                }
             }
-
-
         }
 
         if (!plug.isEmpty()) {
             plugAdapter.setActivate(on);
             plugAdapter.notifyDataSetChanged();
+            if (on) {
+                if (autoplugThread == null) {
+                    autoPlugActivity = new AutoPlugActivity(plug);
+                    autoplugThread = new Thread(autoPlugActivity);
+
+                    autoplugThread.start();
+                }
+            } else {
+                if (autoplugThread != null) {
+                    autoplugThread.interrupt();
+                    autoplugThread = null;
+                }
+            }
         }
 
         if (!blind.isEmpty()) {
             blindAdapter.setActivate(on);
             blindAdapter.notifyDataSetChanged();
+            if (on) {
+                if (autoblindTrhead == null) {
+                    autoBlindActivity = new AutoBlindActivity(blind);
+                    autoblindTrhead = new Thread(autoBlindActivity);
+
+                    autoblindTrhead.start();
+                }
+            } else if (autoblindTrhead != null) {
+                autoblindTrhead.interrupt();
+                autoblindTrhead = null;
+            }
         }
 
 

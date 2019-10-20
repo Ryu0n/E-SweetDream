@@ -1,16 +1,16 @@
 package com.example.ryuon.popup.Module_Object;
 
 public class Blind extends module {
-    float lux;
+    int lux;
 
     String sleep_Time = "";
     String wake_Time = "";
 
-    public float getlux() {
+    public int getlux() {
         return lux;
     }
 
-    public void setLux(float lux) {
+    public void setLux(int lux) {
         this.lux = lux;
     }
 
