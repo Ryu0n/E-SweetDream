@@ -185,7 +185,10 @@ public class GroupControlActivity extends AppCompatActivity implements ListViewB
         sensorAdapter = new ListViewBtnAdapter_Sensor(this, R.layout.listview_btn_item3, sensor) ;
         listview3 = (ListView)findViewById(R.id.group_list_sensor);
         listview3.setAdapter(sensorAdapter);
-        searchingSensingValue();
+        if (module_name.contains("ESD0-센서모듈")) {
+            searchingSensingValue();
+        }
+
 
         Intent intent=getIntent();
         String message = intent.getStringExtra(EXTRA_MESSAGE);
@@ -486,7 +489,7 @@ public class GroupControlActivity extends AppCompatActivity implements ListViewB
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            sensingValue.setText("온도 : " + BluetoothHelper.temperature + "℃, 습도 : " +  BluetoothHelper.humidity + "%, 조도 : " + BluetoothHelper.lux);
+                            sensingValue.setText("온도 : " + BluetoothHelper.temperature + "℃, 습도 : " +  BluetoothHelper.humidity + "%, 조도 : " + BluetoothHelper.lux + "\n");
                         }
                     });
                     try{

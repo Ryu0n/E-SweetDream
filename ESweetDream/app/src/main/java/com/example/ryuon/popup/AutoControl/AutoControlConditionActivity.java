@@ -78,31 +78,31 @@ public class AutoControlConditionActivity extends AppCompatActivity{
         ArrayAdapter<Integer> sleep_hour_adpater = new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_dropdown_item,hour);
         sleep_hour_adpater.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sleep_hour.setAdapter(sleep_hour_adpater);
-        sleep_hour.setSelection(0);
+        sleep_hour.setSelection(hour.size()/2);
 
         final Spinner sleep_minute = (Spinner)findViewById(R.id.sleep_minute);
         ArrayAdapter<Integer> sleep_minute_adapter = new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_dropdown_item,minute);
         sleep_minute_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sleep_minute.setAdapter(sleep_minute_adapter);
-        sleep_minute.setSelection(0);
+        sleep_minute.setSelection(minute.size()/2);
 
         final Spinner sleep_time_before_value = (Spinner)findViewById(R.id.sleep_time_before_value);
         ArrayAdapter<Integer> sleep_time_before_adapter = new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_dropdown_item,sleep_before_value);
         sleep_hour_adpater.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         sleep_time_before_value.setAdapter(sleep_time_before_adapter);
-        sleep_time_before_value.setSelection(0);
+        sleep_time_before_value.setSelection(sleep_before_value.size()/2);
 
         final Spinner wake_hour = (Spinner)findViewById(R.id.wake_hour);
         ArrayAdapter<Integer> wake_hour_adpater = new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_dropdown_item,hour);
         wake_hour_adpater.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         wake_hour.setAdapter(wake_hour_adpater);
-        wake_hour.setSelection(0);
+        wake_hour.setSelection(hour.size()/2);
 
         final Spinner wake_minute = (Spinner)findViewById(R.id.wake_minute);
         ArrayAdapter<Integer> wake_minute_adapter = new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_dropdown_item,minute);
         wake_minute_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         wake_minute.setAdapter(wake_minute_adapter);
-        wake_minute.setSelection(0);
+        wake_minute.setSelection(minute.size()/2);
 
         final Spinner temperature_value = (Spinner)findViewById(R.id.temperature);
         final ArrayAdapter<Integer> temperature_adapter = new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_dropdown_item,temperature);
@@ -146,7 +146,7 @@ public class AutoControlConditionActivity extends AppCompatActivity{
         ArrayAdapter<Integer> lux_adapter = new ArrayAdapter<Integer>(this,android.R.layout.simple_spinner_dropdown_item,percent);
         lux_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         lux_value.setAdapter(lux_adapter);
-        lux_value.setSelection(0);
+        lux_value.setSelection(50);
 
         sleep_hour.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -338,6 +338,13 @@ public class AutoControlConditionActivity extends AppCompatActivity{
         else{
             auto_condition_info.add(lux_item);
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        CharSequence text="자동제어조건을 설정하세요";
+        Toast toast=Toast.makeText(this,text,Toast.LENGTH_LONG);
+        toast.show();
     }
 
 

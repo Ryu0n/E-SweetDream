@@ -16,14 +16,17 @@
             android:text="플러그 1 전원 : " />
 
         <Button
+            android:id="@+id/plug1on"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:text="ON"
+            android:textColor="#FF0d00"
             android:onClick="plug1On"
             />
 
         <Button
+            android:id="@+id/plug1off"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -46,6 +49,7 @@
             android:text="플러그 2 전원 : " />
 
         <Button
+            android:id="@+id/plug2on"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
@@ -54,10 +58,12 @@
             />
 
         <Button
+            android:id="@+id/plug2off"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"
             android:text="OFF"
+            android:textColor="#FF0d00"
             android:onClick="plug2Off"
             />
 
