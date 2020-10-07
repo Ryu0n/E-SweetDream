@@ -1,2 +1,2 @@
 # E-SweetDream
-graduate
+졸업작품
