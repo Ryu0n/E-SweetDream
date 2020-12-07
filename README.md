@@ -1,6 +1,6 @@
 # E-SweetDream  
 
-2018년도 한경대학교 졸업작품  
+2019년도 한경대학교 졸업작품  
 총 44주간 진행하였으며, https://cafe.naver.com/19capstonedesign 에 주간보고서가 업로드되어 있습니다.  
 
 ## 개요  
